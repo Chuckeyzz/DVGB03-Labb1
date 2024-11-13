@@ -48,7 +48,22 @@ static void ui_menu()
 	const char *options[] = {
 		"Menu",
 		"Exit\n",
+		
 		"Bubble sort best case",
+		"Bubble sort worst case",
+		"Bubble sort average case\n",
+		"Insertion sort best case",
+		"Insertion sort worst case",
+		"Insertion sort average case\n",
+		"Quick sort best case",
+		"Quick sort worst case",
+		"Quick sort average case\n",
+		"Linear search best case",
+		"Linear search worst case",
+		"Linear search average case\n",
+		"Binary search best case",
+		"Binary search worst case",
+		"Binary search average case\n",
 		// TODO: complete menu
 	};
 
