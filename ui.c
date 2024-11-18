@@ -8,6 +8,7 @@
 //
 // Private
 //
+
 static void ui_invalid_input()
 {
 	printf("info> bad input\n");
@@ -64,7 +65,6 @@ static void ui_menu()
 		"Binary search best case",
 		"Binary search worst case",
 		"Binary search average case\n",
-		// TODO: complete menu
 	};
 
 	ui_line('=', MENU_WIDTH);
@@ -95,11 +95,62 @@ void ui_run()
 			case 'b':
 				running = false;
 				break;
+			
 			// Bubble sort
 			case 'c':
-				benchmark(bubble_sort_t, best_t, result, RESULT_ROWS);
-				printf("todo> implemenet BE + present results in FE\n");
+				benchmark(bubble_sort_t, best_t, result, RESULT_ROWS);    //create already sorted array for ... a[i] = i
 				break;
+			case 'd':
+				benchmark(bubble_sort_t, worst_t, result, RESULT_ROWS);   //create as unsorted array as possible
+				break;
+			case 'e':
+				benchmark(bubble_sort_t, average_t, result, RESULT_ROWS);   //create randomised array
+				break;
+			
+			//insertion sort
+			case 'f':
+				benchmark(insertion_sort_t, best_t, result, RESULT_ROWS);    //create already sorted array for ... a[i] = i
+				break;
+			case 'g':
+				benchmark(insertion_sort_t, worst_t, result, RESULT_ROWS);   //create as unsorted array as possible
+				break;
+			case 'h':
+				benchmark(insertion_sort_t, average_t, result, RESULT_ROWS);   //create randomised array
+				break;
+			
+			//quick sort
+			case 'i':
+				benchmark(quick_sort_t, best_t, result, RESULT_ROWS);    //create already sorted array for ... a[i] = 
+				break;
+			case 'j':
+				benchmark(quick_sort_t, worst_t, result, RESULT_ROWS);   //create as unsorted array as possible
+				break;
+			case 'k':
+				benchmark(quick_sort_t, average_t, result, RESULT_ROWS);   //create randomised array
+				break;
+			
+			//linear search
+			case 'l':
+				benchmark(linear_search_t, best_t, result, RESULT_ROWS);    //create array where we're looking for the first search-position
+				break;
+			case 'm':
+				benchmark(linear_search_t, worst_t, result, RESULT_ROWS);   //create array where we're looking for the last possible search
+				break;
+			case 'n':
+				benchmark(linear_search_t, average_t, result, RESULT_ROWS);   //create randomised array
+				break;	
+			
+			//binary search
+			case 'o':
+				benchmark(binary_search_t, best_t, result, RESULT_ROWS);    //create array where we're looking for the first search-position
+				break;
+			case 'p':
+				benchmark(binary_search_t, worst_t, result, RESULT_ROWS);   //create array where we're looking for the last possible search
+			break;
+			case 'q':
+				benchmark(binary_search_t, average_t, result, RESULT_ROWS);   //create randomised array
+				break;	
+			
 			// Invalid input
 			default:
 				show_menu = false;
