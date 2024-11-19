@@ -93,8 +93,32 @@ void benchmark(const algorithm_t a, const case_t c, result_t *buf, int n) {   //
     srand(time(NULL));                            //seed for random, using time
 	int size = SIZE_START;                        //size variable to be muliplied by 2 each iteration of switch case below
 	int *arr = (int *)malloc(size * sizeof(int));
-
-	
+    
+    if(a == linear_search_t){
+        switch (c) {
+            case best_t:
+                printf("************************************************************************\n");
+                printf("                         linear search: best\n");
+                printf("------------------------------------------------------------------------\n");
+            	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                printf("------------------------------------------------------------------------\n");
+                break;
+            case worst_t:
+                printf("************************************************************************\n");
+                printf("                         linear search: worst\n");
+                printf("------------------------------------------------------------------------\n");
+            	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                printf("------------------------------------------------------------------------\n");
+                break;
+            case average_t:
+                printf("************************************************************************\n");
+                printf("                         linear search: average\n");
+                printf("------------------------------------------------------------------------\n");
+            	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                printf("------------------------------------------------------------------------\n");
+                break;
+        }
+    }
 	for (int i = 0; i < n + 1; i++){                                    //repeating loop 6 + 1 times. + 1 is for warming up CPU 
 																		//first value of each algorithm is bloated due to caching
 	    switch (a) {
@@ -141,7 +165,7 @@ void benchmark(const algorithm_t a, const case_t c, result_t *buf, int n) {   //
 		//make FUNCT for calculating time and printing in UI.c with buf as inparameter
 		//****************SEE ARRAY_LIST.C FROM LECTURE FOR DYNAMIC CALCULATION OF TIMES************************
 		if(i != 0){
-			printf("%d        %.12f \n", size, elapsed_sec);
+			printf("%-5d       %.12f\n", size, elapsed_sec);
 			size = size * 2;                    //mutiplying size by 2 for next value
 		}
 
