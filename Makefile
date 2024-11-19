@@ -1,7 +1,7 @@
 .PHONY: clean tidy
 
 CC=gcc
-CFLAGS=-Wall -Werror -std=c99 
+CFLAGS=-Wall -Werror -std=gnu99 
 LFLAGS=-lm
 HDR=$(wildcard *.h)
 SRC=$(filter-out $(wildcard *_test.c), $(wildcard *.c))
@@ -17,9 +17,6 @@ main: $(OBJ)
 
 test: $(OBJ_TEST)
 	$(CC) $(CFLAGS_TEST) -o test $(OBJ_TEST) $(LFLAGS_TEST)
-
-%.o: %.c
-	$(CC) -c $(CFLAGS) -o $@ $< $(LFLAGS)
 
 %_test.o: %_test.c
 	$(CC) -c $(CFLAGS_TEST) -o $@ $< $(LFLAGS_TEST)
