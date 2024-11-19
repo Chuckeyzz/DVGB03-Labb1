@@ -71,10 +71,16 @@ static void ui_menu()
 	ui_menu_options(options, sizeof(options) / sizeof(char *));
 	ui_line('-', MENU_WIDTH);
 }
-
+//this function prints only the time for the last element executed beacuse of the forloop, need to callfrom inside the for-loop in analyze.c
+static void printResult(result_t *result){
+	double time = result->time;
+	printf("%.09f \n", time);
+}
 //
 // Public
 //
+
+
 void ui_run()
 {
 	bool running, show_menu;
@@ -99,6 +105,7 @@ void ui_run()
 			// Bubble sort
 			case 'c':
 				benchmark(bubble_sort_t, best_t, result, RESULT_ROWS);    //create already sorted array for ... a[i] = i
+				printResult(result);
 				break;
 			case 'd':
 				benchmark(bubble_sort_t, worst_t, result, RESULT_ROWS);   //create as unsorted array as possible
