@@ -94,30 +94,136 @@ void benchmark(const algorithm_t a, const case_t c, result_t *buf, int n) {   //
 	int size = SIZE_START;                        //size variable to be muliplied by 2 each iteration of switch case below
 	int *arr = (int *)malloc(size * sizeof(int));
     
-    if(a == linear_search_t){
-        switch (c) {
-            case best_t:
-                printf("************************************************************************\n");
-                printf("                         linear search: best\n");
-                printf("------------------------------------------------------------------------\n");
-            	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
-                printf("------------------------------------------------------------------------\n");
-                break;
-            case worst_t:
-                printf("************************************************************************\n");
-                printf("                         linear search: worst\n");
-                printf("------------------------------------------------------------------------\n");
-            	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
-                printf("------------------------------------------------------------------------\n");
-                break;
-            case average_t:
-                printf("************************************************************************\n");
-                printf("                         linear search: average\n");
-                printf("------------------------------------------------------------------------\n");
-            	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
-                printf("------------------------------------------------------------------------\n");
-                break;
-        }
+    switch (a){
+        case bubble_sort_t:
+            switch (c) {
+                case best_t:
+                    printf("************************************************************************\n");
+                    printf("                         bubble sort: best\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+                case worst_t:
+                    printf("************************************************************************\n");
+                    printf("                         bubble sort: worst\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+                case average_t:
+                    printf("************************************************************************\n");
+                    printf("                         bubble sort: average\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+            }
+            break;
+        
+        case insertion_sort_t:
+            switch (c) {
+                case best_t:
+                    printf("************************************************************************\n");
+                    printf("                         insertion sort: best\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+                case worst_t:
+                    printf("************************************************************************\n");
+                    printf("                         insertion sort: worst\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+                case average_t:
+                    printf("************************************************************************\n");
+                    printf("                         insertion sort: average\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+            }
+            break;
+
+        case quick_sort_t:
+            switch (c) {
+                case best_t:
+                    printf("************************************************************************\n");
+                    printf("                         quick sort: best\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+                case worst_t:
+                    printf("************************************************************************\n");
+                    printf("                         quick sort: worst\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+                case average_t:
+                    printf("************************************************************************\n");
+                    printf("                         quick sort: average\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+            }
+            break;
+        
+        case linear_search_t:
+            switch (c) {
+                case best_t:
+                    printf("************************************************************************\n");
+                    printf("                         linear search: best\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+                case worst_t:
+                    printf("************************************************************************\n");
+                    printf("                         linear search: worst\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+                case average_t:
+                    printf("************************************************************************\n");
+                    printf("                         linear search: average\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+            }
+            break;
+
+        case binary_search_t:
+            switch (c) {
+                case best_t:
+                    printf("************************************************************************\n");
+                    printf("                         binary search: best\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+                case worst_t:
+                    printf("************************************************************************\n");
+                    printf("                         binary search: worst\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+                case average_t:
+                    printf("************************************************************************\n");
+                    printf("                         binary search: average\n");
+                    printf("------------------------------------------------------------------------\n");
+                	printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
+                    printf("------------------------------------------------------------------------\n");
+                    break;
+            }
+            break;
     }
 	for (int i = 0; i < n + 1; i++){                                    //repeating loop 6 + 1 times. + 1 is for warming up CPU 
 																		//first value of each algorithm is bloated due to caching
@@ -165,7 +271,7 @@ void benchmark(const algorithm_t a, const case_t c, result_t *buf, int n) {   //
 		//make FUNCT for calculating time and printing in UI.c with buf as inparameter
 		//****************SEE ARRAY_LIST.C FROM LECTURE FOR DYNAMIC CALCULATION OF TIMES************************
 		if(i != 0){
-			printf("%-5d       %.12f\n", size, elapsed_sec);
+			printf("%-5d       %.8f\n", size, elapsed_sec);
 			size = size * 2;                    //mutiplying size by 2 for next value
 		}
 
@@ -180,4 +286,3 @@ void benchmark(const algorithm_t a, const case_t c, result_t *buf, int n) {   //
 	} 
 	free(arr);
 }
-
