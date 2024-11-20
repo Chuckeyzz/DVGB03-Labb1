@@ -10,7 +10,8 @@ static void swap(int *arr1, int *arr2){                     //swap function to h
 	*arr2 = temp;
 }
 static int quick_partition(int arr[], int low, int high){
-	int pivot = arr[high];
+	int middle = (low + high) / 2;
+	int pivot = arr[middle];
 	int i = low - 1;
 
 	for (int j = low; j <= high - 1; j++){
