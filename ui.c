@@ -1,7 +1,6 @@
 #include "analyze.h"
 #include "ui.h"
 #include "io.h"
-
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -165,7 +164,6 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
 			size = size * 2;
 		}
 	}
-	
 }
 
 void ui_run()
