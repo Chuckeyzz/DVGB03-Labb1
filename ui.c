@@ -98,12 +98,12 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                         case worst_t:
                             printf("       %.4e", resultArr[i]/size*log(size));
                             printf("       %.4e", resultArr[i]/(size*size));
-                            printf("       %.4e\n", resultArr[i]/(size*size*size)); 
+                            printf("       %.4e\n", resultArr[i]/((long long)size*size*size)); 
                             break;
                         case average_t:
                             printf("       %.4e", resultArr[i]/size*log(size));
                             printf("       %.4e", resultArr[i]/(size*size));
-                            printf("       %.4e\n", resultArr[i]/(size*size*size)); 
+                            printf("       %.4e\n", resultArr[i]/((long long)size*size*size)); 
                             break;
                     }
                     break;
@@ -118,12 +118,12 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                         case worst_t:
                             printf("       %.4e", resultArr[i]/size*log(size));
                             printf("       %.4e", resultArr[i]/(size*size));
-                            printf("       %.4e\n", resultArr[i]/(size*size*size)); 
+                            printf("       %.4e\n", resultArr[i]/((long long)size*size*size)); 
                             break;
                         case average_t:
                             printf("       %.4e", resultArr[i]/size*log(size));
                             printf("       %.4e", resultArr[i]/(size*size));
-                            printf("       %.4e\n", resultArr[i]/(size*size*size)); 
+                            printf("       %.4e\n", resultArr[i]/((long long)size*size*size)); 
                             break;
                     } 			
                     break;
@@ -138,7 +138,7 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                         case worst_t:
                             printf("       %.4e", resultArr[i]/size*log(size));
                             printf("       %.4e", resultArr[i]/(size*size));
-                            printf("       %.4e\n", resultArr[i]/(size*size*size)); 
+                            printf("       %.4e\n", resultArr[i]/((long long)size*size*size)); 
                             break;
                         case average_t:
                             printf("       %.4e", resultArr[i]/size);
