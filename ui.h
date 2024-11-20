@@ -6,5 +6,5 @@
 
 // ui_run starts a terminal-based user interface
 void ui_run();
-
+void printResult(int size, double *resultArr, int n);
 #endif

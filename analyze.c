@@ -1,5 +1,6 @@
 #include "analyze.h"
 #include "algorithm.h"
+#include "ui.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
@@ -26,21 +27,32 @@ static void makeArraySort(case_t c, int arr[],int size){
 		break;			
 	}
 }
+
+static void quick_best_case(int arr[], int low, int high, int *current_value) {
+	if (low > high) {
+		return;
+	}
+	int mid = (low + high) / 2;
+	arr[mid] = (*current_value)++;
+	quick_best_case(arr, low, mid - 1, current_value);
+	quick_best_case(arr, mid + 1, high, current_value);
+}
+
 static void ArrSortQuick(case_t c, int arr[], int size){
 	switch (c){
 		case best_t:
-			for (int i = 0; i < size; i++){
-				arr[i] = (size - i);}
+			int currValue = 1;
+			quick_best_case(arr, 0, size - 1, &currValue);
 		break;
 		
-		case worst_t:
+		case worst_t:                         //worst case ok
 			for (int i = 0; i < size; i++){
-				arr[i] = i;}
+				arr[i] = size - i;}
 		break;
 		
 		case average_t:
 			for (int i = 0; i < size; i++){
-				arr[i] = (size - i);}
+				arr[i] = rand() % (size);}
 		break;		
 	}
 }
@@ -92,7 +104,9 @@ void benchmark(const algorithm_t a, const case_t c, result_t *buf, int n) {   //
 	struct timespec stop;                         //struct for end of time keeping
     srand(time(NULL));                            //seed for random, using time
 	int size = SIZE_START;                        //size variable to be muliplied by 2 each iteration of switch case below
+	int orgSize = SIZE_START;
 	int *arr = (int *)malloc(size * sizeof(int));
+	double timeArr[n];
 
 	
 	for (int i = 0; i < n + 1; i++){                                    //repeating loop 6 + 1 times. + 1 is for warming up CPU 
@@ -137,11 +151,12 @@ void benchmark(const algorithm_t a, const case_t c, result_t *buf, int n) {   //
 		double elapsed_sec = (stop.tv_sec - start.tv_sec) + (stop.tv_nsec - start.tv_nsec) / 1000000000.0;
 		buf->time = elapsed_sec;
 		buf->size = size;
+		timeArr[i] = elapsed_sec;
 
 		//make FUNCT for calculating time and printing in UI.c with buf as inparameter
 		//****************SEE ARRAY_LIST.C FROM LECTURE FOR DYNAMIC CALCULATION OF TIMES************************
 		if(i != 0){
-			printf("%d        %.12f \n", size, elapsed_sec);
+			//printf("%d        %.12f \n", size, elapsed_sec);
 			size = size * 2;                    //mutiplying size by 2 for next value
 		}
 
@@ -153,7 +168,8 @@ void benchmark(const algorithm_t a, const case_t c, result_t *buf, int n) {   //
             return;
         }
         arr = new_arr;         // Update the pointer to the newly allocated memory
-	} 
+	}
+	printResult(orgSize,timeArr,n);
 	free(arr);
 }
 
