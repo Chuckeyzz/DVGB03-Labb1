@@ -10,7 +10,8 @@ static void swap(int *arr1, int *arr2){                     //swap function to h
 	*arr2 = temp;
 }
 static int quick_partition(int arr[], int low, int high){
-	int pivot = arr[high];
+	int middle = (low + high) / 2;
+	int pivot = arr[middle];
 	int i = low - 1;
 
 	for (int j = low; j <= high - 1; j++){
@@ -38,7 +39,7 @@ void bubble_sort(int *a, int n)     //bublesort working
 	bool swapped = false;
 	for(int i = 0; i < (n - 1); i++){
 		swapped = false;
-		for (int j = 0; j < (n - i - 1); j++){
+		for (int j = 0; j < (n - i - 1); j++) {
 			if(a[j] > a[j + 1]){
 				swap(&a[j], &a[j + 1]);    //calling swap with addresses of a[j] and address of a[j+1]
 				swapped = true;
