@@ -23,7 +23,7 @@ static void makeArraySort(case_t c, int arr[],int size){
 		
 		case average_t:
 			for (int i = 0; i < size; i++) {
-		        arr[i] = rand() % (size + 1);}
+		        arr[i] = rand() % (size);}
 		break;			
 	}
 }
@@ -169,6 +169,7 @@ void benchmark(const algorithm_t a, const case_t c, result_t *buf, int n) {   //
         }
         arr = new_arr;         // Update the pointer to the newly allocated memory
 	}
-	printResult(orgSize,timeArr,n);
+	printResult(orgSize, timeArr, n, a, c);
 	free(arr);
 }
+
