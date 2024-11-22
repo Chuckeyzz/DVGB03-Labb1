@@ -76,6 +76,7 @@ static void printTable(char currAlgo[]){
 	ui_line('*', TABLE_WIDTH);
 	printf("                        %s                                              \n", currAlgo);
 	ui_line('-', TABLE_WIDTH);
+
 }
 
 static void printn(double result, int size){
@@ -103,6 +104,7 @@ static void printconstTime(double result, int size){
 	printf("          N/A    ");
 	printf("       %.4e", result);
 	printf("       %.4e\n", result/size); 
+
 }
 
 //
@@ -111,16 +113,20 @@ static void printconstTime(double result, int size){
 
 //make printstatements into static functions  ---- Code modularity / code health
 void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
+
 	double result;
+
 	ui_line('-', TABLE_WIDTH);
 	for (int i = 0; i < n + 1; i++){
 		if(i != 0){
             printf("%-5d       %.8f", size, resultArr[i]);
+
 			result = resultArr[i];
             switch(a){
                 case bubble_sort_t:
                     switch(c){
                         case best_t:
+
 							printn(result, size);
                             break;
                         case worst_t:
@@ -128,6 +134,7 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                             break;
                         case average_t:
 							printn2(result, size);
+
                             break;
                     }
                     break;
@@ -135,6 +142,7 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                 case insertion_sort_t:
                     switch(c){
                         case best_t:
+
 							printn(result, size); 
                             break;
                         case worst_t:
@@ -142,6 +150,7 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                             break;
                         case average_t:
 							printn2(result, size);
+
                             break;
                     } 			
                     break;
@@ -149,6 +158,7 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                 case quick_sort_t:
                     switch(c){
                         case best_t:
+
 							printnlogn(result, size);
                             break;
                         case worst_t:
@@ -156,6 +166,7 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                             break;
                         case average_t:
 						    printnlogn(result, size);
+
                             break;
                     } 			
                     break;
@@ -163,6 +174,7 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                 case linear_search_t:
                     switch(c){
                         case best_t:
+
 							printconstTime(result, size);
                             break;
                         case worst_t:
@@ -170,6 +182,7 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                             break;
                         case average_t:
 							printnlogn(result, size);
+
                             break;
                     } 			
                     break;
@@ -177,6 +190,7 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                 case binary_search_t:
                     switch(c){
                         case best_t:
+
 							printconstTime(result, size);
                             break;
                         case worst_t:
@@ -184,6 +198,7 @@ void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
                             break;
                         case average_t:
 							printlog(result, size);
+
                             break;
                     } 			
                     break;
@@ -267,7 +282,9 @@ void ui_run()
 			//linear search
 			case 'l':
 				printTable("Linear Search : Best Case");
+
                 printf("size        time T(s)           N/A           T                T/n      \n");
+
 				benchmark(linear_search_t, best_t, result, RESULT_ROWS);    //create array where we're looking for the first search-position
 				break;
 			case 'm':
@@ -284,12 +301,16 @@ void ui_run()
 			//binary search
 			case 'o':
 				printTable("Binary Search : Best Case");
+
                 printf("size        time T(s)           N/A           T                T/n      \n");
+
 				benchmark(binary_search_t, best_t, result, RESULT_ROWS);    //create array where we're looking for the first search-position
 				break;
 			case 'p':
 				printTable("Binary Search : Worst Case");
+
                 printf("size        time T(s)        T                T/logn           T/n      \n");
+
 				benchmark(binary_search_t, worst_t, result, RESULT_ROWS);   //create array where we're looking for the last possible search
 			break;
 			case 'q':
