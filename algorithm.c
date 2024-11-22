@@ -20,7 +20,7 @@ static int quick_partition(int arr[], int low, int high){
 			swap(&arr[i], &arr[j]);
 		}
 	}
-	swap(&arr[i + 1], &arr[high]);
+	swap(&arr[i + 1], &arr[middle]);
 	return i + 1;
 }
 static void quick_sort_withHILO(int *a, int low, int high) {        //soloution for not getting to include high and low for quicksort call

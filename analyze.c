@@ -37,17 +37,29 @@ static void quick_best_case(int arr[], int low, int high, int *current_value) {
 	quick_best_case(arr, low, mid - 1, current_value);
 	quick_best_case(arr, mid + 1, high, current_value);
 }
+//-----------------WORST CASE SEEMS TO WORK--------------------
+static void quick_worst_case(int arr[], int low, int high, int *current_value) {
+    if (low > high) {
+		return;
+	}
+    // Place the smallest available value at the high index
+    int mid = (low + high) / 2;
+    arr[high] = (*current_value)++;
+
+    // Always fill the left side first to ensure imbalance
+    quick_worst_case(arr, low, mid - 1, current_value);
+}
 
 static void ArrSortQuick(case_t c, int arr[], int size){
 	switch (c){
 		case best_t:
 			int currValue = 1;
 			quick_best_case(arr, 0, size - 1, &currValue);
+
 		break;
 		
-		case worst_t:                         //worst case ok
-			for (int i = 0; i < size; i++){
-				arr[i] = size - i;}
+		case worst_t:                         
+			quick_worst_case(arr, 0, size - 1, &currValue);
 		break;
 		
 		case average_t:
@@ -56,7 +68,6 @@ static void ArrSortQuick(case_t c, int arr[], int size){
 		break;		
 	}
 }
-
 
 static void makeArraySearch(algorithm_t a,case_t c, int arr[],int size) {
 	switch (c) {
@@ -151,13 +162,14 @@ void benchmark(const algorithm_t a, const case_t c, result_t *buf, int n) {   //
 		double elapsed_sec = (stop.tv_sec - start.tv_sec) + (stop.tv_nsec - start.tv_nsec) / 1000000000.0;
 		buf->time = elapsed_sec;
 		buf->size = size;
-		timeArr[i] = elapsed_sec;
+		//timeArr[i] = elapsed_sec;
 
 		//make FUNCT for calculating time and printing in UI.c with buf as inparameter
 		//****************SEE ARRAY_LIST.C FROM LECTURE FOR DYNAMIC CALCULATION OF TIMES************************
 		if(i != 0){
 			//printf("%d        %.12f \n", size, elapsed_sec);
 			size = size * 2;                    //mutiplying size by 2 for next value
+			timeArr[i] = elapsed_sec;
 		}
 
 		//reallocating memory for new size of array

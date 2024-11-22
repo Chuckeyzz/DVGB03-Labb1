@@ -1,7 +1,7 @@
 #include "analyze.h"
 #include "ui.h"
 #include "io.h"
-
+#include <math.h>
 #include <stdbool.h>
 #include <stdio.h>
 
@@ -71,101 +71,126 @@ static void ui_menu()
 	ui_menu_options(options, sizeof(options) / sizeof(char *));
 	ui_line('-', MENU_WIDTH);
 }
+
 static void printTable(char currAlgo[]){
 	ui_line('*', TABLE_WIDTH);
 	printf("                        %s                                              \n", currAlgo);
-	ui_line('-', TABLE_WIDTH);	
+	ui_line('-', TABLE_WIDTH);
 }
-static void printBigOh(algorithm_t a, case_t c) {
-	switch (a) {
-		case bubble_sort_t:
-			switch(c){
-				case best_t:
-					printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
-					break;
-				case worst_t:
-					printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
-					break;
-				case average_t:
-					printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
-					break;				
-			}
-			break;
-		
-		case insertion_sort_t:
-			switch (c) {
-				case best_t:
-					printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
-					break;
-				case worst_t:
-					printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
-					break;
-				case average_t:
-					printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
-					break;	
-				}
-			break;
-		
-		case quick_sort_t:
-			switch (c) {
-				case best_t:
-					printf("size        time T(s)        T/n              T/nlogn          T/n^2    \n");
-					break;
-				case worst_t:
-					printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
-					break;
-				case average_t:
-					printf("size        time T(s)        T/n              T/nlogn          T/n^2    \n");
-					break;	
-				}
-			break;
-		
-		case linear_search_t:
-			switch (c) {
-				case best_t:
-					printf("size        time T(s)        N/A              T                T/n      \n"); //kolla konstant komplexitet
-					break;
-				case worst_t:
-					printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
-					break;
-				case average_t:
-					printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
-					break;	
-				}
-			break;
-		
-		case binary_search_t: 
-			switch (c) {
-				case best_t:
-					printf("size        time T(s)        N/A              T                T/n      \n");
-					break;
-				case worst_t:
-					printf("size        time T(s)        time T(s)        time T(s)        time T(s)\n");
-					break;
-				case average_t:
-					printf("size        time T(s)        T                T/logn           T/n      \n");
-					break;	
-			}
-				break;
-	}
+
+static void printn(double result, int size){
+	printf("       %.4e", result/log(size));
+	printf("       %.4e", result/size);
+	printf("       %.4e\n", result/(size*size)); 
+}
+static void printn2(double result, int size){
+	printf("       %.4e", result/size*log(size));
+	printf("       %.4e", result/(size*size));
+	printf("       %.4e\n", result/((long long)size*size*size)); 
+}
+
+static void printnlogn(double result, int size){
+	printf("       %.4e", result/size);
+	printf("       %.4e", result/size*log(size));
+	printf("       %.4e\n", result/(size*size)); 
+}
+static void printlog(double result, int size){
+	printf("       %.4e", result);
+	printf("       %.4e", result/log(size));
+	printf("       %.4e\n", result/size); 
+}
+static void printconstTime(double result, int size){
+	printf("          N/A    ");
+	printf("       %.4e", result);
+	printf("       %.4e\n", result/size); 
 }
 
 //
 // Public
 //
 
+//make printstatements into static functions  ---- Code modularity / code health
 void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
-	ui_line('*', TABLE_WIDTH);
-	ui_line('-', TABLE_WIDTH);
-	printBigOh(a,c);
+	double result;
 	ui_line('-', TABLE_WIDTH);
 	for (int i = 0; i < n + 1; i++){
 		if(i != 0){
-			printf("%-5d       %.8f\n", size, resultArr[i]);
+            printf("%-5d       %.8f", size, resultArr[i]);
+			result = resultArr[i];
+            switch(a){
+                case bubble_sort_t:
+                    switch(c){
+                        case best_t:
+							printn(result, size);
+                            break;
+                        case worst_t:
+							printn2(result, size);
+                            break;
+                        case average_t:
+							printn2(result, size);
+                            break;
+                    }
+                    break;
+
+                case insertion_sort_t:
+                    switch(c){
+                        case best_t:
+							printn(result, size); 
+                            break;
+                        case worst_t:
+							printn2(result, size);
+                            break;
+                        case average_t:
+							printn2(result, size);
+                            break;
+                    } 			
+                    break;
+
+                case quick_sort_t:
+                    switch(c){
+                        case best_t:
+							printnlogn(result, size);
+                            break;
+                        case worst_t:
+							printn2(result, size);
+                            break;
+                        case average_t:
+						    printnlogn(result, size);
+                            break;
+                    } 			
+                    break;
+
+                case linear_search_t:
+                    switch(c){
+                        case best_t:
+							printconstTime(result, size);
+                            break;
+                        case worst_t:
+							printn(result, size); 
+                            break;
+                        case average_t:
+							printnlogn(result, size);
+                            break;
+                    } 			
+                    break;
+
+                case binary_search_t:
+                    switch(c){
+                        case best_t:
+							printconstTime(result, size);
+                            break;
+                        case worst_t:
+							printlog(result, size);
+                            break;
+                        case average_t:
+							printlog(result, size);
+                            break;
+                    } 			
+                    break;
+            }
 			size = size * 2;
 		}
 	}
-	
 }
 
 void ui_run()
@@ -188,74 +213,88 @@ void ui_run()
 			case 'b':
 				running = false;
 				break;
-			
 			// Bubble sort
 			case 'c':
-				printTable("Buble Sort : Best Case");
+				printTable("Bubble Sort : Best Case");
+                printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
 				benchmark(bubble_sort_t, best_t, result, RESULT_ROWS);    //create already sorted array for ... a[i] = i
 				break;
 			case 'd':
-				printTable("Buble Sort : Worst Case");
+				printTable("Bubble Sort : Worst Case");
+                printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
 				benchmark(bubble_sort_t, worst_t, result, RESULT_ROWS);   //create as unsorted array as possible
 				break;
 			case 'e':
-				printTable("Buble Sort : Average Case");
+				printTable("Bubble Sort : Average Case");
+                printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
 				benchmark(bubble_sort_t, average_t, result, RESULT_ROWS);   //create randomised array
 				break;
 			
 			//insertion sort
 			case 'f':
 				printTable("Insertion Sort : Best Case");
+                printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
 				benchmark(insertion_sort_t, best_t, result, RESULT_ROWS);    //create already sorted array for ... a[i] = i
 				break;
 			case 'g':
 				printTable("Insertion Sort : Worst Case");
+                printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
 				benchmark(insertion_sort_t, worst_t, result, RESULT_ROWS);   //create as unsorted array as possible
 				break;
 			case 'h':
 				printTable("Insertion Sort : Average Case");
+                printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
 				benchmark(insertion_sort_t, average_t, result, RESULT_ROWS);   //create randomised array
 				break;
 			
 			//quick sort
 			case 'i':
 				printTable("Quick Sort : Best Case");
+                printf("size        time T(s)        T/n              T/nlogn          T/n^2    \n");
 				benchmark(quick_sort_t, best_t, result, RESULT_ROWS);    //create already sorted array for ... a[i] = 
 				break;
 			case 'j':
 				printTable("Quick Sort : Worst Case");
+                printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
 				benchmark(quick_sort_t, worst_t, result, RESULT_ROWS);   //create as unsorted array as possible
 				break;
 			case 'k':
 				printTable("Quick Sort : Average Case");
+                printf("size        time T(s)        T/n              T/nlogn          T/n^2    \n");
 				benchmark(quick_sort_t, average_t, result, RESULT_ROWS);   //create randomised array
 				break;
 			
 			//linear search
 			case 'l':
 				printTable("Linear Search : Best Case");
+                printf("size        time T(s)           N/A           T                T/n      \n");
 				benchmark(linear_search_t, best_t, result, RESULT_ROWS);    //create array where we're looking for the first search-position
 				break;
 			case 'm':
 				printTable("Linear Search : Worst Case");
+                printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
 				benchmark(linear_search_t, worst_t, result, RESULT_ROWS);   //create array where we're looking for the last possible search
 				break;
 			case 'n':
 				printTable("Linear Search : Average Case");
+                printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
 				benchmark(linear_search_t, average_t, result, RESULT_ROWS);   //create randomised array
 				break;	
 			
 			//binary search
 			case 'o':
 				printTable("Binary Search : Best Case");
+                printf("size        time T(s)           N/A           T                T/n      \n");
 				benchmark(binary_search_t, best_t, result, RESULT_ROWS);    //create array where we're looking for the first search-position
 				break;
 			case 'p':
 				printTable("Binary Search : Worst Case");
+                printf("size        time T(s)        T                T/logn           T/n      \n");
 				benchmark(binary_search_t, worst_t, result, RESULT_ROWS);   //create array where we're looking for the last possible search
 			break;
 			case 'q':
 				printTable("Binary Search : Average Case");
+                printf("size        time T(s)        T                T/logn           T/n      \n");
 				benchmark(binary_search_t, average_t, result, RESULT_ROWS);   //create randomised array
 				break;	
 			
