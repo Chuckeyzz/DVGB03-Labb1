@@ -1,330 +1,185 @@
-#include "analyze.h"
+//ui.c
 #include "ui.h"
-#include "io.h"
-#include <math.h>
-#include <stdbool.h>
-#include <stdio.h>
-
-//
-// Private
-//
-
-static void ui_invalid_input()
+#include "global.h"
+static bool echo = false;
+//-----------------------------------------------------------------------------
+// prints the BST T
+//-----------------------------------------------------------------------------
+void print_tree(BST T)
 {
-	printf("info> bad input\n");
-}
-
-static void ui_exit()
-{
-	printf("info> bye\n");
-}
-
-static char ui_get_choice()
-{
-	char buf[3];
-
-	printf("input> ");
-	return read_line(buf, 3) ? buf[0] : 0;
-}
-
-static void ui_line(char c, int n)
-{
-	while (n-- > 0) {
-		putchar(c);
+	int max_n = pow(2,height(T));
+	int* arr = (int*)calloc(max_n,sizeof(int));
+	bfs(T, arr, max_n);
+	if(!T)
+		printf("\nTree is empty\n\n\n");
+	else{
+		print_2d(arr, max_n-1);
 	}
-	putchar('\n');
+	printf("Size:\t\t%d\n", size(T));
+	printf("Height:\t\t%d\n", height(T));
+	printf("Preorder:\t");	preorder(T,arr);		print_array(arr,size(T));
+	printf("Inorder:\t");	inorder(T,arr);			print_array(arr,size(T));
+	printf("Postorder:\t");	postorder(T,arr);		print_array(arr,size(T));
+	printf("BFS star:\t");bfs(T,arr,max_n);			print_array(arr,max_n-1);
+	free(arr);
 }
-
-static void ui_menu_options(const char *options[], int num_options)
+//-----------------------------------------------------------------------------
+// prints the contents of integer array a from 0 up to size
+//-----------------------------------------------------------------------------
+void print_array(int* a, int size)
 {
-	int i;
-
-	for (i=0; i<num_options; i++) {
-		printf("    %c) %s\n", 'a'+i, options[i]);
-	}
+	printf("[");
+	if(size == 0){printf("]\n");return;}
+	for(int i = 0 ; i < size ; i++)
+		if(a[i] != X)
+			printf("%d%s",a[i],i<size-1?", ":"]");
+		else
+			printf("'*'%s",i<size-1?", ":"]");
+	printf("\n");
 }
-
-static void ui_menu()
+//-----------------------------------------------------------------------------
+// prints a tree, represented by the BFS order star array a of size maxnodes
+// in a 2-dimensional way
+//-----------------------------------------------------------------------------
+void print_2d(int* a, int maxnodes)
 {
-	const char *options[] = {
-		"Menu",
-		"Exit\n",
-		
-		"Bubble sort best case",
-		"Bubble sort worst case",
-		"Bubble sort average case\n",
-		"Insertion sort best case",
-		"Insertion sort worst case",
-		"Insertion sort average case\n",
-		"Quick sort best case",
-		"Quick sort worst case",
-		"Quick sort average case\n",
-		"Linear search best case",
-		"Linear search worst case",
-		"Linear search average case\n",
-		"Binary search best case",
-		"Binary search worst case",
-		"Binary search average case\n",
-	};
-
-	ui_line('=', MENU_WIDTH);
-	ui_menu_options(options, sizeof(options) / sizeof(char *));
-	ui_line('-', MENU_WIDTH);
-}
-
-static void printTable(char currAlgo[]){
-	ui_line('*', TABLE_WIDTH);
-	printf("                        %s                                              \n", currAlgo);
-	ui_line('-', TABLE_WIDTH);
-
-}
-
-static void printn(double result, int size){
-	printf("       %.4e", result/log(size));
-	printf("       %.4e", result/size);
-	printf("       %.4e\n", result/(size*size)); 
-}
-static void printn2(double result, int size){
-	printf("       %.4e", result/size*log(size));
-	printf("       %.4e", result/(size*size));
-	printf("       %.4e\n", result/((long long)size*size*size)); 
-}
-
-static void printnlogn(double result, int size){
-	printf("       %.4e", result/size);
-	printf("       %.4e", result/size*log(size));
-	printf("       %.4e\n", result/(size*size)); 
-}
-static void printlog(double result, int size){
-	printf("       %.4e", result);
-	printf("       %.4e", result/log(size));
-	printf("       %.4e\n", result/size); 
-}
-static void printconstTime(double result, int size){
-	printf("          N/A    ");
-	printf("       %.4e", result);
-	printf("       %.4e\n", result/size); 
-
-}
-
-//
-// Public
-//
-
-//make printstatements into static functions  ---- Code modularity / code health
-void printResult(int size, double *resultArr, int n, algorithm_t a, case_t c){
-
-	double result;
-
-	ui_line('-', TABLE_WIDTH);
-	for (int i = 0; i < n + 1; i++){
-		if(i != 0){
-            printf("%-5d       %.8f", size, resultArr[i]);
-
-			result = resultArr[i];
-            switch(a){
-                case bubble_sort_t:
-                    switch(c){
-                        case best_t:
-
-							printn(result, size);
-                            break;
-                        case worst_t:
-							printn2(result, size);
-                            break;
-                        case average_t:
-							printn2(result, size);
-
-                            break;
-                    }
-                    break;
-
-                case insertion_sort_t:
-                    switch(c){
-                        case best_t:
-
-							printn(result, size); 
-                            break;
-                        case worst_t:
-							printn2(result, size);
-                            break;
-                        case average_t:
-							printn2(result, size);
-
-                            break;
-                    } 			
-                    break;
-
-                case quick_sort_t:
-                    switch(c){
-                        case best_t:
-
-							printnlogn(result, size);
-                            break;
-                        case worst_t:
-							printn2(result, size);
-                            break;
-                        case average_t:
-						    printnlogn(result, size);
-
-                            break;
-                    } 			
-                    break;
-
-                case linear_search_t:
-                    switch(c){
-                        case best_t:
-
-							printconstTime(result, size);
-                            break;
-                        case worst_t:
-							printn(result, size); 
-                            break;
-                        case average_t:
-							printnlogn(result, size);
-
-                            break;
-                    } 			
-                    break;
-
-                case binary_search_t:
-                    switch(c){
-                        case best_t:
-
-							printconstTime(result, size);
-                            break;
-                        case worst_t:
-							printlog(result, size);
-                            break;
-                        case average_t:
-							printlog(result, size);
-
-                            break;
-                    } 			
-                    break;
-            }
-			size = size * 2;
-		}
-	}
-}
-
-void ui_run()
-{
-	bool running, show_menu;
-	result_t result[RESULT_ROWS];
+	int height = ceil(log(maxnodes+1)/log(2));
+	int index = 0;
+	int indent = height*5;
+	int spaces = indent*2;
 	
-	show_menu = true;
-	running = true;
-	while (running) {
-		if (show_menu) {
-			show_menu = false;
-			ui_menu();
+	printf("\nTree 2d\n");
+	
+	for(int i = 0; i < height; i++){
+		printf("\n");
+		for(int j = 0; j < pow(2,i); j++){
+			if(j==0){
+				for(int k = 0; k < indent; k++){
+					printf(" ");
+				}
+			}
+			if(a[index] == -42){
+				printf("*");
+			}else{
+				printf("%d", a[index]);
+			}
+			for(int k = 0; k < spaces; k++){
+				printf(" ");
+			}
+			index++;
 		}
-		switch (ui_get_choice()) {
-			// House keeping
-			case 'a':
-				show_menu = true;
-				break;
-			case 'b':
-				running = false;
-				break;
-			// Bubble sort
-			case 'c':
-				printTable("Bubble Sort : Best Case");
-                printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
-				benchmark(bubble_sort_t, best_t, result, RESULT_ROWS);    //create already sorted array for ... a[i] = i
-				break;
-			case 'd':
-				printTable("Bubble Sort : Worst Case");
-                printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
-				benchmark(bubble_sort_t, worst_t, result, RESULT_ROWS);   //create as unsorted array as possible
-				break;
-			case 'e':
-				printTable("Bubble Sort : Average Case");
-                printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
-				benchmark(bubble_sort_t, average_t, result, RESULT_ROWS);   //create randomised array
-				break;
-			
-			//insertion sort
-			case 'f':
-				printTable("Insertion Sort : Best Case");
-                printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
-				benchmark(insertion_sort_t, best_t, result, RESULT_ROWS);    //create already sorted array for ... a[i] = i
-				break;
-			case 'g':
-				printTable("Insertion Sort : Worst Case");
-                printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
-				benchmark(insertion_sort_t, worst_t, result, RESULT_ROWS);   //create as unsorted array as possible
-				break;
-			case 'h':
-				printTable("Insertion Sort : Average Case");
-                printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
-				benchmark(insertion_sort_t, average_t, result, RESULT_ROWS);   //create randomised array
-				break;
-			
-			//quick sort
-			case 'i':
-				printTable("Quick Sort : Best Case");
-                printf("size        time T(s)        T/n              T/nlogn          T/n^2    \n");
-				benchmark(quick_sort_t, best_t, result, RESULT_ROWS);    //create already sorted array for ... a[i] = 
-				break;
-			case 'j':
-				printTable("Quick Sort : Worst Case");
-                printf("size        time T(s)        T/nlogn          T/n^2            T/n^3    \n");
-				benchmark(quick_sort_t, worst_t, result, RESULT_ROWS);   //create as unsorted array as possible
-				break;
-			case 'k':
-				printTable("Quick Sort : Average Case");
-                printf("size        time T(s)        T/n              T/nlogn          T/n^2    \n");
-				benchmark(quick_sort_t, average_t, result, RESULT_ROWS);   //create randomised array
-				break;
-			
-			//linear search
-			case 'l':
-				printTable("Linear Search : Best Case");
-
-                printf("size        time T(s)           N/A           T                T/n      \n");
-
-				benchmark(linear_search_t, best_t, result, RESULT_ROWS);    //create array where we're looking for the first search-position
-				break;
-			case 'm':
-				printTable("Linear Search : Worst Case");
-                printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
-				benchmark(linear_search_t, worst_t, result, RESULT_ROWS);   //create array where we're looking for the last possible search
-				break;
-			case 'n':
-				printTable("Linear Search : Average Case");
-                printf("size        time T(s)        T/logn           T/n              T/n^2    \n");
-				benchmark(linear_search_t, average_t, result, RESULT_ROWS);   //create randomised array
-				break;	
-			
-			//binary search
-			case 'o':
-				printTable("Binary Search : Best Case");
-
-                printf("size        time T(s)           N/A           T                T/n      \n");
-
-				benchmark(binary_search_t, best_t, result, RESULT_ROWS);    //create array where we're looking for the first search-position
-				break;
-			case 'p':
-				printTable("Binary Search : Worst Case");
-
-                printf("size        time T(s)        T                T/logn           T/n      \n");
-
-				benchmark(binary_search_t, worst_t, result, RESULT_ROWS);   //create array where we're looking for the last possible search
-			break;
-			case 'q':
-				printTable("Binary Search : Average Case");
-                printf("size        time T(s)        T                T/logn           T/n      \n");
-				benchmark(binary_search_t, average_t, result, RESULT_ROWS);   //create randomised array
-				break;	
-			
-			// Invalid input
-			default:
-				show_menu = false;
-				ui_invalid_input();
-				break;
-		}
+		indent = indent/2;
+		spaces = spaces/2;
 	}
-	ui_exit();
+    
+	printf("\n\n");
+}
+//-----------------------------------------------------------------------------
+// prints the menu
+//-----------------------------------------------------------------------------
+void print_menu()
+{
+	printf("********************************\n");
+	printf("m : menu\n");
+	printf("t : display tree\n");
+	printf("a : add value\n");
+	printf("d : delete value\n");
+	printf("f : test membership\n");
+	printf("q : quit\n");
+	printf("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+}
+//-----------------------------------------------------------------------------
+// gets an input character
+//-----------------------------------------------------------------------------
+char get_choice(char* prompt)
+{
+	printf("%s", prompt);
+	char buf[BUFSIZE];
+	fgets(buf, BUFSIZE-1, stdin);
+	if(echo)printf("%c\n", buf[0]);
+	return buf[0];
+}
+//-----------------------------------------------------------------------------
+// gets an input integer
+//-----------------------------------------------------------------------------
+int get_int(char* prompt)
+{
+	printf("%s",prompt);
+	char buf[BUFSIZE];
+	fgets(buf,BUFSIZE-1,stdin);
+	if(!isdigit(buf[0]))return X;
+	return atoi(buf);
+}
+//-----------------------------------------------------------------------------
+// gets input and adds an element to T
+//-----------------------------------------------------------------------------
+BST ui_add(BST T)
+{
+	int val;
+	do{
+		val = get_int("Enter value to be added> ");
+		if(val == X)printf("Error: not allowed in tree\n");
+	}while(val == X);
+	if(echo)printf("%d\n", val);
+	return add(T, val);
+}
+//-----------------------------------------------------------------------------
+// gets input and removes and element from T
+//-----------------------------------------------------------------------------
+BST ui_rem(BST T)
+{
+	int val;
+	do{
+		val = get_int("Enter value to be deleted> ");
+		
+		if(!T){
+			printf("Tree is empty\n");
+			return 0;
+		}
+		
+		if(val == X)printf("Error: not allowed in tree\n");
+	}while(val == X);
+	if(echo)printf("%d\n", val);
+	return rem(T, val);
+}
+//-----------------------------------------------------------------------------
+// gets input and searches for element in T
+//-----------------------------------------------------------------------------
+void ui_find(BST T)
+{
+	int val;
+	do{
+		val = get_int("Enter value to search for> ");
+		if(val == X)printf("Error: not allowed in tree\n");
+	}while(val == X);
+	if(echo)printf("%d\n", val);
+	printf("%d is a%smember\n", val, is_member(T,val)?" ":" non-");
+}
+//-----------------------------------------------------------------------------
+// runs the menu and system
+// m=='a' --> AVL mode, m!='a' BST mode
+// e==true --> echo input, e==false --> no echo
+//-----------------------------------------------------------------------------
+void run(char m, bool e)
+{
+	char val;
+	BST T = NULL;
+	add = (m=='a')? avl_add: bst_add;	// setting "polymorphic" function for add
+	rem = (m=='a')? avl_rem: bst_rem;	// setting "polymorphic" function for rem
+	echo = e;
+	printf("[INFO] running in %s mode\n",m=='a'?"AVL":"BST");
+	print_menu();
+	do {
+		val = get_choice("menu> ");
+		switch(val)
+		{
+			case 'm': print_menu(); 						break;
+			case 't': print_tree(T); 						break;
+			case 'a': T = ui_add(T); 						break;
+			case 'd': T = ui_rem(T); 						break;
+			case 'f': ui_find(T); 							break;
+			case 'q': 						 				break;
+			default	: printf("Unknown command (%c)\n",val);	break;
+		}
+	} while(val != 'q');
 }
